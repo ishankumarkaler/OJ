@@ -9,14 +9,15 @@ class Problem(models.Model):
     def __str__(self):
         return self.name
 
-class User(models.Model):
-    userName = models.TextField()
+# class User(models.Model):
+#     userName = models.TextField()
 
-    def __str__(self):
-        return self.userName
+#     def __str__(self):
+#         return self.userName
+
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     verdict = models.TextField(blank=True)
     submitTime = models.DateTimeField(auto_now=True)
     code = models.TextField()

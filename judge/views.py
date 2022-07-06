@@ -1,5 +1,5 @@
 from multiprocessing import context
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Problem, Submission
 from .submissionForm import codeForm
@@ -18,7 +18,13 @@ def problemDescriptions(request, prob_id):
         'data': Problem.objects.get(id=prob_id),
         'form': form,
     }
-    # print(form.is_valid())
-    # print(problem.objects.get(id=prob_id).name)
-    # print(form.errors.as_data)
     return  render (request, 'problemDescription.html', context)
+
+def submit(request, prob_id):
+    obj = get_object_or_404(Problem, id = prob_id)
+    if request.method == 'POST':
+        form = codeForm(request.POST)
+        if (form.is_valid()):
+            sub = form.save()
+            sub.problem = obj
+            sub.save()

@@ -3,11 +3,10 @@
     {{ data.problemStatement }}<br/>
     {{ data.rating }}<br/>
     <a href="./submission/"><h3>My Submissions</h3></a>
-    <form action="/problem/{{data.id}}/" method="POST">
+    <form action="/judge/{{data.id}}/submit" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn">Submit</button>
     </form>
     
- 
 </div>
