@@ -24,7 +24,7 @@ class Submission(models.Model):
     
     
     def __str__(self):
-        return self.problem.name + "-" + str(self.id)
+        return self.problem.name + "-" + str(self.id) + "-" + str(self.verdict)
 
 class TestCase(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
