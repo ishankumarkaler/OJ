@@ -16,14 +16,15 @@ class Problem(models.Model):
 #         return self.userName
 
 class Submission(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, null=True)
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    verdict = models.TextField(blank=True)
-    submitTime = models.DateTimeField(auto_now=True)
     code = models.TextField()
+    verdict = models.TextField(default="None")
+    submitTime = models.DateTimeField(auto_now=True)
+    
     
     def __str__(self):
-        return self.verdict
+        return self.problem.name + "-" + str(self.id)
 
 class TestCase(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
@@ -31,4 +32,4 @@ class TestCase(models.Model):
     input = models.TextField()
     output = models.TextField()
     def __str__(self):
-        return self.input
+        return self.problem.name + "-" + str(self.id)
