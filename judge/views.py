@@ -41,8 +41,7 @@ def evaluate(submission):
     else:
         path_to_code = r'C:\Users\kumar\Documents\OJ'
         command = 'g++ ' + os.path.join(path_to_code, 'sol.cpp')
-    test_case = get_object_or_404(TestCase, problem = submission.problem)
-    f_input = test_case.input
+
     # Try code compilation
     try:
         subprocess.run(command, capture_output = True, check = True)
@@ -56,6 +55,8 @@ def evaluate(submission):
         command = ['./a.out']
     else:
         command = ['a.exe']
+    test_case = get_object_or_404(TestCase, problem = submission.problem)
+    f_input = test_case.input
     # Try code execution
     try:
         output = subprocess.run(command, capture_output = True, \

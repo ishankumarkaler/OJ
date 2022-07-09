@@ -1,0 +1,23 @@
+{
+  "name": "jstoolchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailwind-build": "tailwindcss -i ../input.css -o ../judge/static/css/output.css --watch",
+    "tailwind-minify": "tailwindcss -o ../static/css/output.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.1.5"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.7",
+    "daisyui": "^2.18.1",
+    "postcss": "^8.4.14",
+    "postcss-cli": "^10.0.0"
+  }
+}

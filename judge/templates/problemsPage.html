@@ -1,12 +1,47 @@
-<div class="main">
- 
-    {% for data in probs %}
- 
-    <a href="./{{data.id}}/"><h2>{{data.id}} - {{ data.name }}</h2></a>
-    {{ data.problemStatement }}<br/>
-    {{ data.rating }}<br/>
-    <hr/>
- 
-    {% endfor %}
- 
-</div>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% comment %} {% load static %}
+    <link rel="stylesheet" href="{% static 'css/output.css' %}"> {% endcomment %}
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.18.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <script src="" async defer></script>
+    
+    <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Problem Name</th>
+              <th>Rating</th>
+              <th>Submissions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for data in probs %}
+            <tr>
+              <td>{{data.id}}</td>
+              <td> <a href="./{{data.id}}/">{{data.name}}</a></td>
+              <td>{{data.rating}}</td>
+              <td> 1 </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+</body>
+</html>

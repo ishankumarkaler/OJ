@@ -1,12 +1,37 @@
-<div class="main">
-    <h2>{{ data.name }}</h2>
-    {{ data.problemStatement }}<br/>
-    {{ data.rating }}<br/>
-    <a href="./submission/"><h3>My Submissions</h3></a>
-    <form action="/judge/{{data.id}}/submit" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn">Submit</button>
-    </form>
-    
-</div>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html data-theme="night">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% comment %} {% load static %}
+    <link rel="stylesheet" href="{% static 'css/output.css' %}"> {% endcomment %}
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.18.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <script src="" async defer></script>
+    <div>
+      <h2 class="text-center text-3xl font-bold underline">{{ data.name }}</h2>
+      {{ data.problemStatement }}<br/>
+      {{ data.rating }}<br/>
+      <a href="./submission/"><h3>My Submissions</h3></a>
+      <form class="textarea textarea-secondary" action="/judge/{{data.id}}/submit" method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button class="btn btn-info">Submit</button>
+      </form>
+      
+    </div>
+
+</body>
+</html>
