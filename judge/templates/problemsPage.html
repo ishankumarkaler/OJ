@@ -32,12 +32,12 @@
             </tr>
           </thead>
           <tbody>
-            {% for data in probs %}
+            {% for problem in problems %}
             <tr>
-              <td>{{data.id}}</td>
-              <td> <a href="./{{data.id}}/">{{data.name}}</a></td>
-              <td>{{data.rating}}</td>
-              <td> 1 </td>
+              <td>{{problem.id}}</td>
+              <td> <a class="font-semibold text-white" href="./{{data.id}}/">{{problem.name}}</a></td>
+              <td>{{problem.rating}}</td>
+              <td> {{submissionCount|get_item_from_dict:problem.id}} </td>
             </tr>
             {% endfor %}
           </tbody>

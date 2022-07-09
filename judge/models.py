@@ -1,5 +1,10 @@
 from django.db import models
 
+# class User(models.Model):
+#     userName = models.TextField()
+
+#     def __str__(self):
+#         return self.userName
 
 class Problem(models.Model):
     name = models.TextField()
@@ -8,12 +13,6 @@ class Problem(models.Model):
 
     def __str__(self):
         return self.name
-
-# class User(models.Model):
-#     userName = models.TextField()
-
-#     def __str__(self):
-#         return self.userName
 
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, null=True)
@@ -31,5 +30,6 @@ class TestCase(models.Model):
     # caseNumber = models.IntegerField()
     input = models.TextField()
     output = models.TextField()
+    
     def __str__(self):
         return self.problem.name + "-" + str(self.id)
