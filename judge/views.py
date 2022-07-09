@@ -106,4 +106,10 @@ def submit(request, prob_id):
             submission.problem = obj
             submission.save()
             evaluate(submission)
-        return redirect('problem_list_page')
+        return redirect('view_problem_submissions', prob_id)
+
+def submissions(request, prob_id):
+    context = {
+        'submissions' : Submission.objects.filter(problem = get_object_or_404(Problem, id = prob_id)).order_by('-id'),        
+    }
+    return render(request, 'problemSubmissions.html', context)
