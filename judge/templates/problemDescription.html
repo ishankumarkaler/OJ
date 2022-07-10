@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="navbar-center">
-          <a class="btn btn-ghost normal-case text-xl">The Online Judge</a>
+          <a href = "{%url 'problem_list_page'%}" class="btn btn-ghost normal-case text-xl">The Online Judge</a>
         </div>
         <div class="navbar-end">
           <button class="btn btn-ghost btn-circle">
@@ -55,22 +55,27 @@
           </button>
         </div>
       </div>
-    <div class="tabs">
-        <a class="tab tab-bordered tab-active">Task</a> 
-        <a class="tab tab-bordered" href="./submissions">Results</a> 
+    <div class="px-4">
+        <div class="tabs">
+            <a class="tab tab-bordered tab-active">Task</a> 
+            <a class="tab tab-bordered" href="./submissions">Results</a> 
+        </div>
+
+        <div>
+            <h2 class="text-center text-3xl font-bold underline">{{ data.name }}</h2>
+            {{ data.problemStatement }}<br/>
+            {{ data.rating }}<br/>
+            <form class="textarea textarea-secondary text-black" action="/judge/{{data.id}}/submit" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn" onclick="changeClass()" id="mySubmitButton">Submit</button>
+            </form>
+            
+          </div>
+
     </div>
 
-    <div>
-      <h2 class="text-center text-3xl font-bold underline">{{ data.name }}</h2>
-      {{ data.problemStatement }}<br/>
-      {{ data.rating }}<br/>
-      <form class="textarea textarea-secondary" action="/judge/{{data.id}}/submit" method="POST">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button class="btn" onclick="changeClass()" id="mySubmitButton">Submit</button>
-      </form>
-      
-    </div>
+    
 
 </body>
 </html>

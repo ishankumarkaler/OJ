@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="navbar-center">
-          <a class="btn btn-ghost normal-case text-xl">The Online Judge</a>
+          <a href = "{%url 'problem_list_page'%}" class="btn btn-ghost normal-case text-xl">The Online Judge</a>
         </div>
         <div class="navbar-end">
           <button class="btn btn-ghost btn-circle">
@@ -49,31 +49,36 @@
           </button>
         </div>
       </div>
-    <div class="tabs">
-        <a class="tab tab-bordered" href="./">Task</a> 
-        <a class="tab tab-bordered tab-active">Results</a> 
+    <div class="px-4">
+        <div class="tabs pl-100">
+            <a class="tab tab-bordered" href="./">Task</a> 
+            <a class="tab tab-bordered tab-active">Results</a> 
+        </div>
+
+
+        <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>verdict</th>
+                  <th>Submit time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for submission in submissions %}
+                <tr>
+                  <td>{{submission.id}}</td>
+                  <td>{{submission.verdict}}</td>
+                  <td> {{submission.submitTime}} </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th></th>
-              <th>verdict</th>
-              <th>Submit time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for submission in submissions %}
-            <tr>
-              <td>{{submission.id}}</td>
-              <td>{{submission.verdict}}</td>
-              <td> {{submission.submitTime}} </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+    
 
 </body>
 </html>
