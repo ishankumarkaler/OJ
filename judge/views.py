@@ -108,8 +108,17 @@ def submit(request, prob_id):
             evaluate(submission)
         return redirect('view_problem_submissions', prob_id)
 
+def getColorMap():
+    dict = {
+        "CE":"text-warning",
+        "WA":"text-error",
+        "AC":"text-success",
+        "TLE":"text-error",
+    }
+    return dict
 def submissions(request, prob_id):
     context = {
         'submissions' : Submission.objects.filter(problem = get_object_or_404(Problem, id = prob_id)).order_by('-id'),        
+        'colorMap' : getColorMap(),
     }
     return render(request, 'problemSubmissions.html', context)

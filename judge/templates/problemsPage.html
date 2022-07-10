@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
+<html data-theme="luxury">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +22,7 @@
     <script src="" async defer></script>
     
     <div class="navbar bg-base-100">
-      <div class="navbar-start">
+      <div class="navbar-start bg-neutral">
         <div class="dropdown">
           <label tabindex="0" class="btn btn-ghost btn-circle">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
@@ -34,10 +34,10 @@
           </ul>
         </div>
       </div>
-      <div class="navbar-center">
+      <div class="navbar-center bg-neutral">
         <a href = "{%url 'problem_list_page'%}" class="btn btn-ghost normal-case text-xl">The Online Judge</a>
       </div>
-      <div class="navbar-end">
+      <div class="navbar-end bg-neutral">
         <button class="btn btn-ghost btn-circle">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
         </button>
@@ -66,7 +66,7 @@
             {% for problem in problems %}
             <tr>
               <td>{{problem.id}}</td>
-              <td> <a class="font-semibold text-white" href="./{{problem.id}}/">{{problem.name}}</a></td>
+              <td> <a class="font-semibold text-primary" href="./{{problem.id}}/">{{problem.name}}</a></td>
               <td>{{problem.rating}}</td>
               <td> {{submissionCount|get_item_from_dict:problem.id}} </td>
             </tr>
