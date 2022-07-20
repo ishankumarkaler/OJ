@@ -5,14 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import Problem, Submission, TestCase
 from .submissionForm import codeForm
 import os, subprocess, sys, time
-from dotenv import load_dotenv, find_dotenv
 import docker
+from dotenv import load_dotenv, find_dotenv
 
-
-USE_DOCKER = True
 load_dotenv(find_dotenv())
-
 from django.template.defaulttags import register
+
+USE_DOCKER = False
 
 
 @register.filter
@@ -39,7 +38,6 @@ def displayProblems(request):
     context = {
         'problems': Problem.objects.all(),
         'submissionCount': getSubmissionCount(),
-
     }
     return render(request, 'problemsPage.html', context)
 
@@ -68,8 +66,8 @@ def checker(output, correct_ouput):
 # sudo docker stats ee7c455b1630 --no-stream --format "{{.ID}}: {{.CPUPerc}}"
 
 def evaluate_docker(submission):
-    client = docker.from_env()
-    container = client.containers.run(image='gcc', detach=True, tty=True)
+    client = docker.from_env(timeout=1)
+    container = client.containers.run(image='gcc', detach=True, tty=True, mem_limit="512m", mem_swappiness=0)
     os.system("docker cp sol.cpp {}:/sol.cpp".format(container.short_id))
     container.exec_run("g++ sol.cpp")
     container.exec_run("chmod +x a.out")
@@ -99,10 +97,11 @@ def evaluate_docker(submission):
             return
         with open("output.txt", "w") as f:
             f.write("")
-
     container.kill()
     container.stop()
     container.remove()
+
+
 def evaluate(submission):
     with open("sol.cpp", "w") as f:
         f.write(submission.code)
@@ -124,11 +123,11 @@ def evaluate(submission):
         return
     submission.verdict = "Compiled"
     submission.save()
-    
+
     if USE_DOCKER:
         evaluate_docker(submission)
         return
-    
+
     if sys.platform == 'linux':
         command = ['./a.out']
     else:

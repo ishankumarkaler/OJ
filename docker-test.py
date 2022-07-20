@@ -1,8 +1,8 @@
 import docker
 import os, time
-client = docker.from_env()
+client = docker.from_env(timeout=1)
 print(client.images.list())
-container = client.containers.run(image='gcc', detach=True, tty=True)
+container = client.containers.run(image='gcc', detach=True, tty=True, mem_limit="128m", mem_swappiness=0)
 print(container.short_id)
 print(client.containers.list())
 os.system("docker cp sol.cpp {}:/sol.cpp".format(container.short_id))
@@ -11,8 +11,10 @@ container.exec_run("g++ sol.cpp")
 container.exec_run("touch output.txt")
 time.sleep(2)
 container.exec_run("chmod +x a.out")
-output = container.exec_run(['sh', '-c', './a.out< input.txt > output.txt'])
-print(output)
+output = container.exec_run(['sh', '-c', './a.out< input.txt'], demux=True)
+stdout, stderr = output.output
+print("stdout", stdout)
+print("stderr", stderr)
 os.system("docker cp {}:/output.txt output.txt".format(container.short_id))
 container.kill()
 container.stop()
