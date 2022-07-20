@@ -158,16 +158,16 @@ def evaluate(submission):
 			break
 
 
-	def submit(request, prob_id):
-		obj = get_object_or_404(Problem, id=prob_id)
-		if request.method == 'POST':
-			form = codeForm(request.POST)
-			if (form.is_valid()):
-				submission = form.save()
-				submission.problem = obj
-				submission.save()
-				evaluate(submission)
-			return redirect('view_problem_submissions', prob_id)
+def submit(request, prob_id):
+	obj = get_object_or_404(Problem, id=prob_id)
+	if request.method == 'POST':
+		form = codeForm(request.POST)
+		if (form.is_valid()):
+			submission = form.save()
+			submission.problem = obj
+			submission.save()
+			evaluate(submission)
+		return redirect('view_problem_submissions', prob_id)
 
 
 def getColorMap():
