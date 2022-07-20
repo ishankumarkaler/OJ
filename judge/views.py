@@ -105,69 +105,69 @@ def evaluate_docker(submission):
 
 
 def evaluate(submission):
-    with open("sol.cpp", "w") as f:
-        f.write(submission.code)
+	with open("sol.cpp", "w") as f:
+		f.write(submission.code)
 
-    if sys.platform == 'linux':
-        path_to_code = BASE_DIR
-        code_path = os.path.join(path_to_code, 'sol.cpp')
-        command = ['g++', code_path]
-    else:
-        path_to_code = r'C:\Users\kumar\Documents\OJ'
-        command = 'g++ ' + os.path.join(path_to_code, 'sol.cpp')
+	if USE_DOCKER:
+		evaluate_docker(submission)
+		return
 
-    # Try code compilation
-    try:
-        subprocess.run(command, capture_output=True, check=True)
-    except subprocess.CalledProcessError:
-        submission.verdict = "CE"
-        submission.save()
-        return
-    submission.verdict = "Compiled"
-    submission.save()
+	if sys.platform == 'linux':
+		path_to_code = BASE_DIR
+		code_path = os.path.join(path_to_code, 'sol.cpp')
+		command = ['g++', code_path]
+	else:
+		path_to_code = r'C:\Users\kumar\Documents\OJ'
+		command = 'g++ ' + os.path.join(path_to_code, 'sol.cpp')
 
-    if USE_DOCKER:
-        evaluate_docker(submission)
-        return
+	# Try code compilation
+	try:
+		subprocess.run(command, capture_output=True, check=True)
+	except subprocess.CalledProcessError:
+		submission.verdict = "CE"
+		submission.save()
+		return
+	submission.verdict = "Compiled"
+	submission.save()
 
-    if sys.platform == 'linux':
-        command = ['./a.out']
-    else:
-        command = ['a.exe']
-    try:
-        test_cases = TestCase.objects.filter(problem=submission.problem)
-    except TestCase.DoesNotExist:
-        raise Http404("Given query not found....")
+	if sys.platform == 'linux':
+		command = ['./a.out']
+	else:
+		command = ['a.exe']
+	try:
+		test_cases = TestCase.objects.filter(problem=submission.problem)
+	except TestCase.DoesNotExist:
+		raise Http404("Given query not found....")
 
-    for test_case in test_cases:
-        f_input = test_case.input
-        # Try code execution
-        try:
-            output = subprocess.run(command, capture_output=True, text=True, input=f_input, check=True, timeout=2)
-        except subprocess.TimeoutExpired:
-            submission.verdict = "TLE"
-            submission.save()
-            return
-        # Calculate the verdict and save it
-        if checker(output.stdout, test_case.output):
-            submission.verdict = "AC"
-            submission.save()
-        else:
-            submission.verdict = "WA"
-            submission.save()
-            break
+	for test_case in test_cases:
+		f_input = test_case.input
+		# Try code execution
+		try:
+			output = subprocess.run(command, capture_output=True, text=True, input=f_input, check=True, timeout=2)
+		except subprocess.TimeoutExpired:
+			submission.verdict = "TLE"
+			submission.save()
+			return
+		# Calculate the verdict and save it
+		if checker(output.stdout, test_case.output):
+			submission.verdict = "AC"
+			submission.save()
+		else:
+			submission.verdict = "WA"
+			submission.save()
+			break
 
 
-def submit(request, prob_id):
-    obj = get_object_or_404(Problem, id=prob_id)
-    if request.method == 'POST':
-        form = codeForm(request.POST)
-        if (form.is_valid()):
-            submission = form.save()
-            submission.problem = obj
-            submission.save()
-            evaluate(submission)
-        return redirect('view_problem_submissions', prob_id)
+	def submit(request, prob_id):
+		obj = get_object_or_404(Problem, id=prob_id)
+		if request.method == 'POST':
+			form = codeForm(request.POST)
+			if (form.is_valid()):
+				submission = form.save()
+				submission.problem = obj
+				submission.save()
+				evaluate(submission)
+			return redirect('view_problem_submissions', prob_id)
 
 
 def getColorMap():
