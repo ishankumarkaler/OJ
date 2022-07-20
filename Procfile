@@ -1,1 +1,1 @@
-web: gunicorn judge.wsgi --log-file -
+web: gunicorn OJ.wsgi --log-file -
