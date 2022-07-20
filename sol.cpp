@@ -9,7 +9,7 @@ int main(){
     for (auto& e:a){
         cin >> e;
     }
-    sort(a.begin(), a.end());
+    sort(a.rbegin(), a.rend());
     for (int ele:a){
         cout << ele << " ";
     }

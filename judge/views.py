@@ -13,7 +13,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 from django.template.defaulttags import register
 
-USE_DOCKER = False
+USE_DOCKER = True
 
 
 @register.filter
