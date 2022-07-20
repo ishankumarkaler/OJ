@@ -2,6 +2,8 @@ from curses import use_default_colors
 from multiprocessing import context
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+
+from OJ.settings import BASE_DIR
 from .models import Problem, Submission, TestCase
 from .submissionForm import codeForm
 import os, subprocess, sys, time
@@ -107,7 +109,7 @@ def evaluate(submission):
         f.write(submission.code)
 
     if sys.platform == 'linux':
-        path_to_code = '/home/ishan/code/OJ/'
+        path_to_code = BASE_DIR
         code_path = os.path.join(path_to_code, 'sol.cpp')
         command = ['g++', code_path]
     else:
