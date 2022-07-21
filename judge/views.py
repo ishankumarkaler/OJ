@@ -8,12 +8,9 @@ from .models import Problem, Submission, TestCase
 from .submissionForm import codeForm
 import os, subprocess, sys, time
 import docker
-from dotenv import load_dotenv, find_dotenv
-
-load_dotenv(find_dotenv())
 from django.template.defaulttags import register
-
-USE_DOCKER = True
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 
 @register.filter
@@ -108,7 +105,7 @@ def evaluate(submission):
 	with open("sol.cpp", "w") as f:
 		f.write(submission.code)
 
-	if USE_DOCKER:
+	if os.environ['USE_DOCKER'] == 'True':
 		evaluate_docker(submission)
 		return
 
