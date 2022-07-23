@@ -1,7 +1,3 @@
-#include<bits/stdc++.h>
-
-using namespace std;
-
-int main(){
-    cout << "Hello World!";
-}
+if os.environ['USE_DOCKER'] == 'True':
+		evaluate_docker(submission)
+		return

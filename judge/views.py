@@ -105,10 +105,6 @@ def evaluate(submission):
 	with open("sol.cpp", "w") as f:
 		f.write(submission.code)
 
-	if os.environ['USE_DOCKER'] == 'True':
-		evaluate_docker(submission)
-		return
-
 	if sys.platform == 'linux':
 		path_to_code = BASE_DIR
 		code_path = os.path.join(path_to_code, 'sol.cpp')
@@ -127,6 +123,10 @@ def evaluate(submission):
 	submission.verdict = "Compiled"
 	submission.save()
 
+	if os.environ['USE_DOCKER'] == 'True':
+		evaluate_docker(submission)
+		return
+ 
 	if sys.platform == 'linux':
 		command = ['./a.out']
 	else:
