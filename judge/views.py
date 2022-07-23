@@ -21,6 +21,8 @@ def get_item_from_dict(dictionary, key):
 def index(request):
     return HttpResponse("Hello, world.")
 
+def homeRedirect(request):
+    return redirect("problem_list_page")
 
 def getSubmissionCount():
     Dict = {}

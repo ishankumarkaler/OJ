@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
+from judge import views
 urlpatterns = [
+    path("", views.homeRedirect, name="home"),
     path('judge/', include('judge.urls')),
     path('admin/', admin.site.urls),
 ]
