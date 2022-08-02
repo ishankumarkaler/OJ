@@ -64,43 +64,64 @@ def checker(output, correct_ouput):
     return True
 
 
-# sudo docker stats ee7c455b1630 --no-stream --format "{{.ID}}: {{.CPUPerc}}"
+# docker stats ee7c455b1630 --no-stream --format "{{.ID}}: {{.CPUPerc}}"
 
 def evaluate_docker(submission):
-    client = docker.from_env(timeout=1)
-    container = client.containers.run(image='gcc', detach=True, tty=True, mem_limit="512m", mem_swappiness=0)
-    os.system("docker cp sol.cpp {}:/sol.cpp".format(container.short_id))
-    container.exec_run("g++ sol.cpp")
-    container.exec_run("chmod +x a.out")
-    time.sleep(1)
-    container.exec_run("touch output.txt")
-    try:
-        test_cases = TestCase.objects.filter(problem=submission.problem)
-    except TestCase.DoesNotExist:
-        raise Http404("Given query not found....")
+	client = docker.from_env(timeout=1)
+	container = client.containers.run(image='gcc', detach=True, tty=True, mem_limit="512m", mem_swappiness=0, cpu_period=100000, cpu_quota=50000)
+	os.system("docker cp sol.cpp {}:/sol.cpp".format(container.short_id))
+	container.exec_run("g++ sol.cpp")
+	container.exec_run("chmod +x a.out")
+	time.sleep(1)
+	container.exec_run("touch output.txt")
+	try:
+		test_cases = TestCase.objects.filter(problem=submission.problem)
+	except TestCase.DoesNotExist:
+		raise Http404("Given query not found....")
 
-    for test_case in test_cases:
-        f_input = test_case.input
-        with open("input_docker.txt", 'w') as f:
-            f.write(f_input)
-        os.system("docker cp input_docker.txt {}:/input_docker.txt".format(container.short_id))
-        output = container.exec_run(['sh', '-c', './a.out < input_docker.txt > output.txt'])
-        os.system("docker cp {}:/output.txt output.txt".format(container.short_id))
-        docker_output = ""
-        with open("output.txt", "r") as f:
-            docker_output = f.read()
-        if checker(docker_output, test_case.output):
-            submission.verdict = "AC"
-            submission.save()
-        else:
-            submission.verdict = "WA"
-            submission.save()
-            return
-        with open("output.txt", "w") as f:
-            f.write("")
-    container.kill()
-    container.stop()
-    container.remove()
+	for test_case in test_cases:
+		if test_case.id == 4: continue
+		f_input = test_case.input
+		with open("input_docker.txt", 'w') as f:
+			f.write(f_input)
+		os.system("docker cp input_docker.txt {}:/input_docker.txt".format(container.short_id))
+		# output = container.exec_run(['sh', '-c', './a.out < input_docker.txt > output.txt'])
+		try:
+			cmd = 'docker exec ' + str(container.id) + ' sh -c "{}"'.format("./a.out < input_docker.txt > output.txt")
+			output = subprocess.run(cmd, shell = True, timeout=1)
+		except subprocess.TimeoutExpired:
+			submission.verdict = "TLE"
+			submission.save()
+			container.kill()
+			container.stop()
+			container.remove()
+			return
+		if output.returncode != 0:
+			submission.verdict = "RE"
+			submission.save()
+			container.kill()
+			container.stop()
+			container.remove()
+			return
+		os.system("docker cp {}:/output.txt output.txt".format(container.short_id))
+		docker_output = ""
+		with open("output.txt", "r") as f:
+			docker_output = f.read()
+		if checker(docker_output, test_case.output):
+			submission.verdict = "AC"
+			submission.save()
+		else:
+			submission.verdict = "WA"
+			submission.save()
+			container.kill()
+			container.stop()
+			container.remove()
+			return
+		with open("output.txt", "w") as f:
+			f.write("")
+	container.kill()
+	container.stop()
+	container.remove()
 
 
 def evaluate(submission):
